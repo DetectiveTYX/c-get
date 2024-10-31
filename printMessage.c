@@ -8,12 +8,16 @@
 函数入口参数：user,当前用户编号指针
 函数返回值：
 */
-void queryPersonal(USER user[], int* userNumPointer)
+void queryPersonal(USER user[], PKG pkg[] ,int* userNumPointer)
 {
     int usernum = *userNumPointer;
+	int pkgnum = user[usernum].packageID;
     printf("\t\t\t\t用户：%4d \t\t用户账号：%d \t\t用户密码：%s\n", usernum+1, user[usernum].ID, user[usernum].code);
     printf("\t\t\t\t用户名：%s \t\t用户余额：%.2f元\t用户套餐编号：%d \n", user[usernum].name, user[usernum].balance, user[usernum].packageID);
-
+	printf("\t\t\t\t您当前的套餐为：\n");
+	printf("\t\t\t\t编号：%2d  套餐名：%s  套餐价格：%.2f 元\n", pkg[pkgnum].ID, pkg[pkgnum].name, pkg[pkgnum].money);
+	printf("\t\t\t\t套餐4G流量：%.2f GB  套餐5G流量：%.2f GB\n", pkg[pkgnum].mobileData4G, pkg[pkgnum].mobileData5G);
+	printf("\t\t\t\t套餐通话时长：%.2f min  宽带带宽：%d MB/S\n", pkg[pkgnum].callDuration, pkg[pkgnum].Broadband);
 }
 /*函数功能：用户查询套餐信息
 函数入口参数：user,当前用户编号指针

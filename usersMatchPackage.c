@@ -6,16 +6,16 @@
 
 /*函数功能：用户匹配套餐入口函数
 * 函数入口参数：主程序结构体数组user,pkg
-* 函数返回值：直接修改主程序结构体数组
+* 函数返回值：直接修改主程序结构体数组,int型，1为返回用户界面，-1为完成后返回查看当前套餐
 */
-void matchPackage(USER user[], PKG pkg[])
+int matchPackage(USER user[], PKG pkg[],int* userNumPointer)
 {
 	PKG needPKG = { 0,"",0,0,0,0,0 }, * a = &needPKG;//初始化需求流量结构
 	int mustGet[4] = { 0,0,0,0 };
 	int b = getPKG(a, mustGet);//获取用户流量结构和是否必须,b=1时获取成功
 	float pkgCompare[100] = { 0 };//获取每一项pkg的占比
 	comparePackage(pkg, needPKG, mustGet, pkgCompare);
-	putSuggest(pkg, needPKG, mustGet, pkgCompare);
+	return putSuggest(user,pkg, needPKG, mustGet, pkgCompare,userNumPointer);
 }
 
 /*函数功能：获取用户此项需求是否必须
@@ -340,9 +340,13 @@ int judgeOK(PKG pkg[], PKG needPKG, int mustGet[],int num)
 	return a;
 }
 
-
-int putSuggest(PKG pkg[], PKG needPKG, int mustGet[], float pkgCompare[])
+/*函数功能：为用户推荐套餐
+* 函数入口参数：主程序pkg，用户需求needpkg，用户必须需求数组mustget，内部推荐度pkgcompare,当前第num个用户
+* 函数返回值：int型，1为返回用户界面
+*/
+int putSuggest(USER user[],PKG pkg[], PKG needPKG, int mustGet[], float pkgCompare[],int* userNumPointer)
 {
+	int num = &userNumPointer;
 	int b = withoutZeroNum(pkgCompare);
 	int sortNum[100] = { 0 };
 	int right[100] = { 0 };//符合要求
@@ -362,7 +366,12 @@ int putSuggest(PKG pkg[], PKG needPKG, int mustGet[], float pkgCompare[])
 		{
 			right[rightNum] = sortNum[i];
 			rightNum += 1;
-			printf("\t\t\t\t第%d条符合需求\n", i);//此时的i可以直接对应大程序的pkg
+			printf("\t\t\t\t符合需求的第%d个套餐\n", rightNum);//此时的i可以直接对应大程序的pkg
+			printf("\t\t\t\t编号：%2d  套餐名：%s  套餐价格：%.2f 元\n", pkg[i].ID, pkg[i].name, pkg[i].money);
+			printf("\t\t\t\t套餐4G流量：%.2f GB  套餐5G流量：%.2f GB\n", pkg[i].mobileData4G, pkg[i].mobileData5G);
+			printf("\t\t\t\t套餐通话时长：%.2f min  宽带带宽：%d MB/S\n", pkg[i].callDuration, pkg[i].Broadband);
+
+			
 		}
 		else
 		{
@@ -374,7 +383,6 @@ int putSuggest(PKG pkg[], PKG needPKG, int mustGet[], float pkgCompare[])
 	if (!rightNum)
 	{
 		printf("\t\t\t\t暂时没有符合您需求的套餐哦\n");
-
 	}
 	if (rightNum < 6)
 	{
@@ -385,8 +393,64 @@ int putSuggest(PKG pkg[], PKG needPKG, int mustGet[], float pkgCompare[])
 		}
 
 	}
+	char a[100] = { 0 };//用于记录键盘输入字符
+    b = 0;//用于判断是否进入下一步
 	char x[100] = { 0 };
-	printf("\t\t\t\t");
-	scanf("%s", x);
+	int d = 1;
+	
+	do {
+		b = 1;
+		int x = 0;
+		printf("\t\t\t\t以上套餐仅供参考。如不想更改当前套餐可输入0退出。 \n");
+		printf("\t\t\t\t如果需要修改到其他套餐，请输入该套餐编号： \n");
+		printf("\t\t\t\t");
+		scanf("%s", &a);//输入
+		for (int i = 0; i < 100; i++)//判断是否输入均为数字
+		{
+			if (a[i] == '\0')//此时已经把所有有效判断完成，退出判断
+			{
+				break;
+			}
+			if (a[i] < '0' || a[i] > '9')//具体判断不符合规则方式
+			{
+				printf("\t\t\t\t输入有误，请重新输入\n");
+				d = 0;//用户输入不符合规则
+				break;
+			}
+		}
+		if (d)//用户输入符合规则
+		{
+			if (atoi(a) == 0)
+			{
+
+				return 1;//返回用户界面1
+			}
+			int count = 0;
+			for (int e = 0; e < 100; e++)
+			{
+				if (pkg[e].ID)
+				{
+					count++;
+				}
+			}
+			if (atoi(a) <count )
+			{
+				user[num].packageID = atoi(a);
+				int pkgnum = user[num].packageID;
+				printf("\t\t\t\t套餐修改完成！您现在的套餐是\n");
+				printf("\t\t\t\t编号：%2d  套餐名：%s  套餐价格：%.2f 元\n", pkg[pkgnum].ID, pkg[pkgnum].name, pkg[pkgnum].money);
+				printf("\t\t\t\t套餐4G流量：%.2f GB  套餐5G流量：%.2f GB\n", pkg[pkgnum].mobileData4G, pkg[pkgnum].mobileData5G);
+				printf("\t\t\t\t套餐通话时长：%.2f min  宽带带宽：%d MB/S\n", pkg[pkgnum].callDuration, pkg[pkgnum].Broadband);
+				printf("\t\t\t\t输入任意内容完成修改，返回用户菜单:");
+				scanf("%s", x);
+				return 1;//套餐修改成功，返回1
+			}
+			else
+			{
+				printf("\t\t\t\t输入有误，请重新输入\n");
+			}
+		}
+
+	} while (b);
 }
 

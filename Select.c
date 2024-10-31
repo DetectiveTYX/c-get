@@ -23,6 +23,7 @@ int USERSelect(USER user[], PKG pkg[],int* userNumPointer)//用户界面
 
 	do {
 		b = 1;
+		int x = 0;
 		printf("\t\t\t\t");
 		scanf("%s", &a);//输入
 		if (atoi(a) == 1 || atoi(a) == 2 || atoi(a) == 3 || atoi(a) == 4 || atoi(a) == 5 || atoi(a) == 6)
@@ -39,13 +40,20 @@ int USERSelect(USER user[], PKG pkg[],int* userNumPointer)//用户界面
 			if (atoi(a) == 2)
 			{
 				printf("\t\t\t\t正在查询套餐信息 \n");
-				return queryPackage(user, pkg, userNumPointer);//1时返回用户主菜单，3时用户开始修改套餐信息
+				x = queryPackage(user, pkg, userNumPointer);
+				if (x == 0)
+				{
+					return 1;//1时返回用户主菜单
+				}
+				strcpy(a, "3");
+				
 			}
 			if (atoi(a) == 3)
 			{
 				printf("\t\t\t\t正在修改套餐 \n");
-				matchPackage(user, pkg);
-				return 1;//返回用户主菜单
+				int m = 0;
+				m=matchPackage(user, pkg,userNumPointer);
+         		return m;//返回用户主菜单
 			}
 			if (atoi(a) == 4)
 			{

@@ -21,7 +21,7 @@ void userSearch(USER a[])//用户信息查询函数
     for (i = 0; i < n; i++)
     {
         printf("\t\t\t\t用户：%4d \t\t用户账号：%d \t\t用户密码：%s\n", i + 1, a[i].ID, a[i].code);
-        printf("\t\t\t\t用户名：%s \t\t用户余额：%.2f元\t用户套餐编号：%d \n", a[i].name, a[i].balance, a[i].packageID);
+        printf("\t\t\t\t用户名：%s \t\t用户余额：%.2f元\t用户套餐编号：%d \n\n", a[i].name, a[i].balance, a[i].packageID);
         //printf("用户套餐编号：%d \n", a[i].packageID);
         //printf("\t   套餐4G流量：%8.2fGB\t套餐5G流量：%4.2fGB  \n", b[i].mobileData4G, b[i].mobileData5G );
         //printf("\t   套餐通话时长：%.2fmin\t套餐宽带带宽：%dMB/S\n", b[i].callDuration, b[i].Broadband);
