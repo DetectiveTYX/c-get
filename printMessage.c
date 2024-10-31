@@ -34,7 +34,7 @@ int queryPackage(USER user[],PKG pkg[],int* userNumPointer)
 		scanf("%s", &a);//输入
 		if (atoi(a) == 2 || atoi(a) == 1)
 		{
-
+			b = 0;
 			if (atoi(a) == 1)
 			{
 				printf("\t\t\t\t您当前的套餐为：\n");

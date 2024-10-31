@@ -4,6 +4,20 @@
 #include <math.h>
 #include"fileReadWrite.h"
 
+/*函数功能：用户匹配套餐入口函数
+* 函数入口参数：主程序结构体数组user,pkg
+* 函数返回值：直接修改主程序结构体数组
+*/
+void matchPackage(USER user[], PKG pkg[])
+{
+	PKG needPKG = { 0,"",0,0,0,0,0 }, * a = &needPKG;//初始化需求流量结构
+	int mustGet[4] = { 0,0,0,0 };
+	int b = getPKG(a, mustGet);//获取用户流量结构和是否必须,b=1时获取成功
+	float pkgCompare[100] = { 0 };//获取每一项pkg的占比
+	comparePackage(pkg, needPKG, mustGet, pkgCompare);
+	putSuggest(pkg, needPKG, mustGet, pkgCompare);
+}
+
 /*函数功能：获取用户此项需求是否必须
 * 函数入口参数：统计是否必须数组mustget，第几项num
 * 函数返回值：直接修改mustget数组
@@ -375,16 +389,4 @@ int putSuggest(PKG pkg[], PKG needPKG, int mustGet[], float pkgCompare[])
 	printf("\t\t\t\t");
 	scanf("%s", x);
 }
-/*函数功能：用户匹配套餐入口函数
-* 函数入口参数：主程序结构体数组user,pkg
-* 函数返回值：直接修改主程序结构体数组
-*/
-void matchPackage(USER user[], PKG pkg[])
-{
-	PKG needPKG = { 0,"",0,0,0,0,0 }, * a = &needPKG;//初始化需求流量结构
-	int mustGet[4] = { 0,0,0,0 };
-	int b = getPKG(a, mustGet);//获取用户流量结构和是否必须,b=1时获取成功
-	float pkgCompare[100] = { 0 };//获取每一项pkg的占比
-	comparePackage(pkg, needPKG, mustGet, pkgCompare);
-	putSuggest(pkg, needPKG, mustGet, pkgCompare);
-}
+

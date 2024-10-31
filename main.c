@@ -10,6 +10,7 @@
 #include"packageManage.h"
 #include"userManage.h"
 #include"Select.h"
+#include"printMessage.h"
 
 void printPrompt(int num, USER user[], ADM adm[], PKG pkg[]);//
 int actionPrompt(int num, USER user[], ADM adm[], PKG pkg[], int* userNumPointer,int*admNumPointer);//该函数返回值会赋值给num
